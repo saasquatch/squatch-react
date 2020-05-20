@@ -1,0 +1,34 @@
+{
+  "name": "squatch-react",
+  "version": "0.0.1",
+  "description": "",
+  "source": "src/index.tsx",
+  "main": "dist/index.js",
+  "module": "dist/index.module.js",
+  "scripts": {
+    "start": "parcel example/index.html",
+    "build": "microbundle",
+    "dev": "microbundle watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saasquatch/squatch-react.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/saasquatch/squatch-react/issues"
+  },
+  "homepage": "https://github.com/saasquatch/squatch-react#readme",
+  "devDependencies": {
+    "@types/react": "^16.9.35",
+    "microbundle": "^0.12.0",
+    "parcel": "^1.12.4"
+  },
+  "dependencies": {
+    "@saasquatch/squatch-js": "^2.1.6",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}
