@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import squatch from "@saasquatch/squatch-js";
+import React, { useContext, useRef } from "react";
+import {Widgets} from "@saasquatch/squatch-js";
 import useBrowserOnlyEffect from "./useBrowserOnlyEffect";
 
 const APIContext = React.createContext(undefined);
@@ -10,37 +10,41 @@ const APIContext = React.createContext(undefined);
  * 
  * @param props 
  */
-export function Provider({ children, api }) {
-    <APIContext.Provider value={api}>
+export function Provider({ children, config, user, jwt }) {
+
+    const widgets = new Widgets(config);
+    const value = {
+        widgets,
+        user,
+        jwt
+    }
+    return <APIContext.Provider value={value}>
         {children}
     </APIContext.Provider>
 }
 
-export function Embed() {
+export function Embed({widgetType="p/referrals/w/referrerWidget"}) {
 
-    const api = useApi();
+    const {widgets, user, jwt} = useApi();
+    const ref = useRef();
     useBrowserOnlyEffect(() => {
-        var initObj = {		//object containing the init parameters for squatch.js
-
-            //the object for the user you want to upsert
-            user: {
-                id: 'abc_123',
-                accountId: 'abc_123',
-                email: 'john@example.com',
-                firstName: 'John',
-                lastName: 'Doe'
-            },
-            engagementMedium: 'EMBED',
-            widgetType: 'p/referrals/w/referrerWidget',
-            jwt: 'TODO'
-        };
-        squatch.widgets().upsertUser(initObj).then(function (response) {
+        if (ref.current) {
+            var initObj = {		//object containing the init parameters for squatch.js
+                //the object for the user you want to upsert
+                user,
+                engagementMedium: 'EMBED',
+                element: ref.current,
+                widgetType,
+                jwt
+            };
+        }
+        widgets.upsertUser(initObj).then(function (response) {
             const user = response.user;
         }).catch(function (error) {
             console.log(error);
         });
-    }, []);
-    return <div className="squatchembed"></div>
+    }, [ref.current]);
+    return <div ref={ref}></div>
 }
 
 export function useApi() {
